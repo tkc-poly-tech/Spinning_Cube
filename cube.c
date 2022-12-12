@@ -5,12 +5,12 @@
 
 float A, B, C;
 
-float cube_Width = 10;
+float cube_Width = 50;
 int width = 160, height = 44;
 float z_buffer[160 * 44];
 char buffer[160 * 44];
 int background_ASCII_code = ' ';
-int distance_from_cam = 60;
+int distance_from_cam = 500;
 float K1 = 40;
 
 float increment_speed = 0.6;
@@ -71,7 +71,12 @@ int main()
 		{
 			for (float cube_Y = - cube_Width; cube_Y < cube_Width; cube_Y += increment_speed)
 			{
-				calculate_for_surface(cube_X, cube_Y, -cube_Width, '$');
+				calculate_for_surface(cube_X, cube_Y, -cube_Width, '.');
+				calculate_for_surface(cube_Width, cube_Y, cube_X, '$');
+				calculate_for_surface(-cube_Width, cube_Y, -cube_X, '~');
+				calculate_for_surface(-cube_X, cube_Y, cube_Width, '#');
+				calculate_for_surface(cube_X, -cube_Width, -cube_Y, ';');
+				calculate_for_surface(cube_X, cube_Width, cube_Y, '+');
 			}
 		}
 		printf("\x1b[H");
