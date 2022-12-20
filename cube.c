@@ -5,12 +5,13 @@
 
 float A, B, C;
 
-float cube_Width = 50;
+float cube_Width = 20;
 int width = 160, height = 44;
 float z_buffer[160 * 44];
 char buffer[160 * 44];
-int background_ASCII_code = ' ';
+int background_ASCII_code = '.';
 int distance_from_cam = 500;
+float horizontal_offset;
 float K1 = 40;
 
 float increment_speed = 0.6;
@@ -60,18 +61,78 @@ void	calculate_for_surface(float cube_X, float cube_Y, float cube_Z, int ch)
 	}
 }
 
+void	*my_memset(void *b, int c, size_t len)
+{
+	size_t	i;
+	unsigned char *converted_b;
+
+	converted_b = (unsigned char *)b;
+	i = 0;
+	while (i < len)
+	{
+		converted_b[i] = (unsigned char)c;
+		i++;
+	}
+	return (b);
+}
+
+// void	my_putchar(char c, int fd)
+// {
+// 	if (fd < 0)
+// 		return ;
+// 	write(fd, &c, 1);
+// }
+
+void	my_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
 int main()
 {
 	printf("\x1b[2J");
 	while (1)
 	{
-		memset(buffer, background_ASCII_code, width * height);
-		memset(z_buffer, 0, width * height * 4);
+		my_memset(buffer, background_ASCII_code, width * height);
+		my_memset(z_buffer, 0, width * height * 4);
+		cube_Width = 20;
+		horizontal_offset = - 2 * cube_Width;
+
 		for (float cube_X = - cube_Width; cube_X < cube_Width; cube_X += increment_speed)
 		{
 			for (float cube_Y = - cube_Width; cube_Y < cube_Width; cube_Y += increment_speed)
 			{
-				calculate_for_surface(cube_X, cube_Y, -cube_Width, '.');
+				calculate_for_surface(cube_X, cube_Y, -cube_Width, '@');
+				calculate_for_surface(cube_Width, cube_Y, cube_X, '$');
+				calculate_for_surface(-cube_Width, cube_Y, -cube_X, '~');
+				calculate_for_surface(-cube_X, cube_Y, cube_Width, '#');
+				calculate_for_surface(cube_X, -cube_Width, -cube_Y, ';');
+				calculate_for_surface(cube_X, cube_Width, cube_Y, '+');
+			}
+		}
+
+		cube_Width = 10;
+		horizontal_offset = 1 * cube_Width;
+		for (float cube_X = - cube_Width; cube_X < cube_Width; cube_X += increment_speed)
+		{
+			for (float cube_Y = - cube_Width; cube_Y < cube_Width; cube_Y += increment_speed)
+			{
+				calculate_for_surface(cube_X, cube_Y, -cube_Width, '@');
+				calculate_for_surface(cube_Width, cube_Y, cube_X, '$');
+				calculate_for_surface(-cube_Width, cube_Y, -cube_X, '~');
+				calculate_for_surface(-cube_X, cube_Y, cube_Width, '#');
+				calculate_for_surface(cube_X, -cube_Width, -cube_Y, ';');
+				calculate_for_surface(cube_X, cube_Width, cube_Y, '+');
+			}
+		}
+
+		cube_Width = 5;
+		horizontal_offset = 8 * cube_Width;
+		for (float cube_X = - cube_Width; cube_X < cube_Width; cube_X += increment_speed)
+		{
+			for (float cube_Y = - cube_Width; cube_Y < cube_Width; cube_Y += increment_speed)
+			{
+				calculate_for_surface(cube_X, cube_Y, -cube_Width, '@');
 				calculate_for_surface(cube_Width, cube_Y, cube_X, '$');
 				calculate_for_surface(-cube_Width, cube_Y, -cube_X, '~');
 				calculate_for_surface(-cube_X, cube_Y, cube_Width, '#');
@@ -82,12 +143,13 @@ int main()
 		printf("\x1b[H");
 		for (int k = 0; k < width * height; k++)
 		{
-			putchar(k % width ? buffer[k] : 10);
+			my_putchar(k % width ? buffer[k] : 10);
 		}
 		
-		A += 0.005;
-		B += 0.005;
-		usleep(1000);
+		A += 0.05;
+		B += 0.05;
+		C += 0.01;
+		usleep(8000 * 2);
 	}
 	
 	return (0);
