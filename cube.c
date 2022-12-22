@@ -76,13 +76,6 @@ void	*my_memset(void *b, int c, size_t len)
 	return (b);
 }
 
-// void	my_putchar(char c, int fd)
-// {
-// 	if (fd < 0)
-// 		return ;
-// 	write(fd, &c, 1);
-// }
-
 void	my_putchar(char c)
 {
 	write(1, &c, 1);
